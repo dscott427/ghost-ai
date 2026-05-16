@@ -17,6 +17,7 @@ export const metadata: Metadata = {
   description: "Ghost AI",
 };
 
+/** Root layout — applies global fonts, dark class, and base body styles to every route. */
 export default function RootLayout({
   children,
 }: Readonly<{
