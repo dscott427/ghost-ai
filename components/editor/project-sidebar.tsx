@@ -31,6 +31,8 @@ function EmptyState({ label }: { label: string }) {
 export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
   return (
     <aside
+      aria-hidden={!isOpen}
+      inert={!isOpen}
       className={[
         "fixed left-0 top-0 z-50 flex h-full w-72 flex-col",
         "border-r border-surface-border bg-surface/95 backdrop-blur-sm",
