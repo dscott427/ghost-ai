@@ -5,9 +5,14 @@ import { EditorNavbar } from "./editor-navbar";
 import { ProjectSidebar } from "./project-sidebar";
 
 interface EditorShellProps {
+  /** Content rendered in the main canvas area below the navbar. */
   children: React.ReactNode;
 }
 
+/**
+ * Full-viewport editor layout. Owns sidebar open/close state and composes
+ * EditorNavbar and ProjectSidebar around the provided canvas children.
+ */
 export function EditorShell({ children }: EditorShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
 

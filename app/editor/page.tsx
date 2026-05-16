@@ -1,7 +1,7 @@
 import { EditorShell } from "@/components/editor/editor-shell";
 
-/** Home page — renders the editor shell with a canvas placeholder. */
-export default function Home() {
+/** Editor route — renders the full editor chrome with a canvas placeholder. */
+export default function EditorPage() {
   return (
     <EditorShell>
       <div className="flex flex-1 items-center justify-center">

@@ -5,10 +5,15 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 interface ProjectSidebarProps {
+  /** Whether the sidebar is visible. */
   isOpen: boolean;
+  /** Callback to close the sidebar. */
   onClose: () => void;
 }
 
+/**
+ * Placeholder shown inside a tab when there are no projects to display.
+ */
 function EmptyState({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
@@ -18,6 +23,11 @@ function EmptyState({ label }: { label: string }) {
   );
 }
 
+/**
+ * Floating project sidebar that slides in from the left without pushing canvas
+ * content. Shows My Projects and Shared tabs, each with an empty placeholder
+ * state, and a New Project button in the footer.
+ */
 export function ProjectSidebar({ isOpen, onClose }: ProjectSidebarProps) {
   return (
     <aside
