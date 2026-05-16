@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { ClerkProvider } from "@clerk/nextjs";
+import { dark } from "@clerk/ui/themes";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -17,18 +19,34 @@ export const metadata: Metadata = {
   description: "Ghost AI",
 };
 
-/** Root layout — applies global fonts, dark class, and base body styles to every route. */
+/** Root layout — applies Clerk provider, global fonts, dark class, and base body styles. */
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+    <ClerkProvider
+      appearance={{
+        theme: dark,
+        variables: {
+          colorPrimary: "var(--accent-primary)",
+          colorBackground: "var(--bg-base)",
+          colorForeground: "var(--text-primary)",
+          colorMutedForeground: "var(--text-secondary)",
+          colorInput: "var(--bg-subtle)",
+          colorInputForeground: "var(--text-primary)",
+          colorNeutral: "var(--text-muted)",
+          borderRadius: "0.75rem",
+        },
+      }}
     >
-      <body className="min-h-full flex flex-col">{children}</body>
-    </html>
+      <html
+        lang="en"
+        className={`${geistSans.variable} ${geistMono.variable} dark h-full antialiased`}
+      >
+        <body className="min-h-full flex flex-col">{children}</body>
+      </html>
+    </ClerkProvider>
   );
 }

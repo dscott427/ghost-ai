@@ -1,7 +1,6 @@
 # Progress Tracker
 
-Update this file after every meaningful implementation
-change.
+Update this file whenever the current phase, active feature, or implementation state changes.
 
 ## Current Phase
 
@@ -9,37 +8,37 @@ change.
 
 ## Current Goal
 
-- Feature 02: Editor chrome — top navbar and floating project sidebar shell
+- Feature 03: Auth — Clerk provider, protected routes, sign-in/sign-up pages, UserButton in navbar
 
 ## Completed
 
-- Cleaned up Next.js boilerplate (stripped globals.css, removed SVGs, replaced page.tsx with minimal "Ghost AI" component)
-- **Feature 01: Design System** — shadcn/ui initialized, all 7 UI primitive components installed (Button, Card, Dialog, Input, Tabs, Textarea, ScrollArea), lucide-react installed, globals.css updated with full dark-only theme palette, `dark` class added to `<html>`
-- **Feature 02: Editor** — `EditorNavbar` (fixed top bar, sidebar toggle with PanelLeftOpen/Close icons, left/center/right sections) and `ProjectSidebar` (fixed floating overlay, slides in from left, My Projects + Shared tabs, New Project button); dialog pattern ready via shadcn Dialog
+- Cleaned up Next.js boilerplate
+- **Feature 01: Design System** — shadcn/ui, 7 UI primitives, lucide-react, dark-only theme tokens in globals.css
+- **Feature 02: Editor** — EditorNavbar, ProjectSidebar, EditorShell; editor route at /editor
 
 ## In Progress
 
-- None
+- **Feature 03: Auth** — ClerkProvider, proxy.ts route protection, sign-in/sign-up pages, UserButton
 
 ## Next Up
 
-- Feature 03 (see context/feature-specs/)
+- Feature 04 (see context/feature-specs/)
 
 ## Open Questions
 
-- [Any unresolved product or technical decisions]
+- None
 
 ## Architecture Decisions
 
-- Dark-only: all CSS variable values live in `:root` directly; `.dark` class is forced on `<html>` for shadcn variant compatibility
-- shadcn's semantic variables (`--background`, `--foreground`, etc.) are mapped to project palette variables (`--bg-base`, `--text-primary`, etc.) defined in `:root`
-- Do not modify generated `components/ui/*` files after installation
+- Dark-only: all CSS variable values live in `:root`; `dark` class forced on `<html>`
 - Sidebar floats (fixed position) — does not push canvas content
-- Sidebar and navbar state (`isSidebarOpen`) lives in the parent editor page, passed down as props
-- Project Tailwind utilities: `bg-base`, `bg-surface`, `bg-elevated`, `bg-subtle`, `text-copy-primary`, `text-copy-secondary`, `text-copy-muted`, `text-copy-faint`, `border-surface-border`, `border-subtle-border`, `text-brand`, `bg-accent-dim`, `text-ai`, `text-ai-text`, `text-error`, `text-success`, `text-warning`
+- Sidebar/navbar state lives in EditorShell, passed down as props
+- Do not modify `components/ui/*` files (shadcn)
+- Auth uses protected-first strategy: all routes protected except /sign-in and /sign-up
+- proxy.ts (not middleware.ts) is the Clerk middleware file for Next.js 16+
 
 ## Session Notes
 
-- Next.js 16, Tailwind 4, shadcn 4.7 — Tailwind v4 uses `@import "tailwindcss"` and `@theme inline`, no tailwind.config.js
-- `lib/utils.ts` has `cn()` using clsx + tailwind-merge
-- Dialog pattern ready for future use via `components/ui/dialog.tsx`
+- Next.js 16, Tailwind 4, shadcn 4.7, @clerk/nextjs 7.3.5
+- proxy.ts is identical to middleware.ts code — only filename differs in Next.js 16+
+- Clerk env vars: NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY already in .env.local
