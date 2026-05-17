@@ -1,12 +1,9 @@
-import { EditorShell } from "@/components/editor/editor-shell";
+import { auth } from "@clerk/nextjs/server";
+import { redirect } from "next/navigation";
 
-/** Home page — renders the editor shell with a canvas placeholder. */
-export default function Home() {
-  return (
-    <EditorShell>
-      <div className="flex flex-1 items-center justify-center">
-        <p className="text-sm text-copy-muted">Canvas goes here</p>
-      </div>
-    </EditorShell>
-  );
+/** Home — redirects authenticated users to the editor, unauthenticated users to sign-in. */
+export default async function Home() {
+  const { isAuthenticated } = await auth();
+  if (isAuthenticated) redirect("/editor");
+  redirect("/sign-in");
 }
