@@ -127,7 +127,7 @@ export function ProjectSidebar({
             aria-label="Close sidebar"
             className="h-7 w-7 text-copy-muted hover:text-copy-primary"
           >
-            <X className="h-4 w-4" />
+            <X className="h-5 w-5" />
           </Button>
         </div>
 
@@ -185,7 +185,7 @@ export function ProjectSidebar({
             onClick={onNewProject}
             className="w-full gap-2 rounded-xl bg-brand text-base hover:bg-brand/90"
           >
-            <Plus className="h-4 w-4" />
+            <Plus className="h-5 w-5" />
             New Project
           </Button>
         </div>

@@ -36,7 +36,7 @@ export function RenameProjectDialog({
 
   return (
     <Dialog open={open} onOpenChange={(o) => { if (!o) onClose(); }}>
-      <DialogContent showCloseButton={false}>
+      <DialogContent showCloseButton={false} className="rounded-3xl">
         <DialogHeader>
           <DialogTitle>Rename Project</DialogTitle>
           <DialogDescription>
