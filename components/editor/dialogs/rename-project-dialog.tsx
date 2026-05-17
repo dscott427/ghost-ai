@@ -10,12 +10,12 @@ import {
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import type { MockProject } from "@/hooks/use-project-dialogs";
+import type { Project } from "@/lib/projects";
 
 interface RenameProjectDialogProps {
   open: boolean;
   onClose: () => void;
-  activeProject: MockProject | null;
+  activeProject: Project | null;
   nameInput: string;
   setNameInput: (v: string) => void;
   isLoading: boolean;

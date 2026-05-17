@@ -9,12 +9,12 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
-import type { MockProject } from "@/hooks/use-project-dialogs";
+import type { Project } from "@/lib/projects";
 
 interface DeleteProjectDialogProps {
   open: boolean;
   onClose: () => void;
-  activeProject: MockProject | null;
+  activeProject: Project | null;
   isLoading: boolean;
   onConfirm: () => void;
 }

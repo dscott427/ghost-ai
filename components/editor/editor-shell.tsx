@@ -7,16 +7,17 @@ import { EditorHome } from "./editor-home";
 import { CreateProjectDialog } from "./dialogs/create-project-dialog";
 import { RenameProjectDialog } from "./dialogs/rename-project-dialog";
 import { DeleteProjectDialog } from "./dialogs/delete-project-dialog";
-import { useProjectDialogs } from "@/hooks/use-project-dialogs";
+import { useProjectActions } from "@/hooks/use-project-actions";
+import type { Project } from "@/lib/projects";
 
-/**
- * Full-viewport editor layout. Owns sidebar open/close state and all project
- * dialog state. Composes EditorNavbar, ProjectSidebar, EditorHome, and the
- * three project dialogs.
- */
-export function EditorShell() {
+interface EditorShellProps {
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+}
+
+export function EditorShell({ ownedProjects, sharedProjects }: EditorShellProps) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
-  const dialogs = useProjectDialogs();
+  const actions = useProjectActions();
 
   return (
     <div className="flex h-screen flex-col overflow-hidden bg-base">
@@ -27,39 +28,40 @@ export function EditorShell() {
       <ProjectSidebar
         isOpen={sidebarOpen}
         onClose={() => setSidebarOpen(false)}
-        onNewProject={dialogs.openCreate}
-        onRenameProject={dialogs.openRename}
-        onDeleteProject={dialogs.openDelete}
-        projects={dialogs.projects}
+        onNewProject={actions.openCreate}
+        onRenameProject={actions.openRename}
+        onDeleteProject={actions.openDelete}
+        ownedProjects={ownedProjects}
+        sharedProjects={sharedProjects}
       />
       <main className="flex flex-1 flex-col overflow-hidden pt-12">
-        <EditorHome onNewProject={dialogs.openCreate} />
+        <EditorHome onNewProject={actions.openCreate} />
       </main>
 
       <CreateProjectDialog
-        open={dialogs.openDialog === "create"}
-        onClose={dialogs.closeDialog}
-        nameInput={dialogs.nameInput}
-        setNameInput={dialogs.setNameInput}
-        slug={dialogs.slug}
-        isLoading={dialogs.isLoading}
-        onSubmit={dialogs.handleSubmit}
+        open={actions.openDialog === "create"}
+        onClose={actions.closeDialog}
+        nameInput={actions.nameInput}
+        setNameInput={actions.setNameInput}
+        slug={actions.slug}
+        isLoading={actions.isLoading}
+        onSubmit={actions.handleSubmit}
       />
       <RenameProjectDialog
-        open={dialogs.openDialog === "rename"}
-        onClose={dialogs.closeDialog}
-        activeProject={dialogs.activeProject}
-        nameInput={dialogs.nameInput}
-        setNameInput={dialogs.setNameInput}
-        isLoading={dialogs.isLoading}
-        onSubmit={dialogs.handleSubmit}
+        open={actions.openDialog === "rename"}
+        onClose={actions.closeDialog}
+        activeProject={actions.activeProject}
+        nameInput={actions.nameInput}
+        setNameInput={actions.setNameInput}
+        isLoading={actions.isLoading}
+        onSubmit={actions.handleSubmit}
       />
       <DeleteProjectDialog
-        open={dialogs.openDialog === "delete"}
-        onClose={dialogs.closeDialog}
-        activeProject={dialogs.activeProject}
-        isLoading={dialogs.isLoading}
-        onConfirm={dialogs.handleSubmit}
+        open={actions.openDialog === "delete"}
+        onClose={actions.closeDialog}
+        activeProject={actions.activeProject}
+        isLoading={actions.isLoading}
+        onConfirm={actions.handleSubmit}
       />
     </div>
   );
