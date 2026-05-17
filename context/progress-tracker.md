@@ -8,21 +8,23 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Goal
 
-- Feature 03: Auth — Clerk provider, protected routes, sign-in/sign-up pages, UserButton in navbar
+- Feature 05 (see context/feature-specs/)
 
 ## Completed
 
 - Cleaned up Next.js boilerplate
 - **Feature 01: Design System** — shadcn/ui, 7 UI primitives, lucide-react, dark-only theme tokens in globals.css
 - **Feature 02: Editor** — EditorNavbar, ProjectSidebar, EditorShell; editor route at /editor
+- **Feature 03: Auth** — ClerkProvider, proxy.ts route protection, sign-in/sign-up pages, UserButton, auth page redesign (50/50 layout)
+- **Feature 04: Project Dialogs** — editor home screen, create/rename/delete dialogs, sidebar project items with rename/delete actions (owned only), mobile backdrop scrim, useProjectDialogs hook
 
 ## In Progress
 
-- **Feature 03: Auth** — ClerkProvider, proxy.ts route protection, sign-in/sign-up pages, UserButton
+- None
 
 ## Next Up
 
-- Feature 04 (see context/feature-specs/)
+- Feature 05 (see context/feature-specs/)
 
 ## Open Questions
 
