@@ -8,7 +8,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Goal
 
-- Feature 10 (see context/feature-specs/)
+- Feature 13 (see context/feature-specs/)
 
 ## Completed
 
@@ -22,6 +22,9 @@ Update this file whenever the current phase, active feature, or implementation s
 - **Feature 07: Wire Editor Home** — lib/projects.ts data helper (owned + shared), hooks/use-project-actions.ts (create/rename/delete with real API calls, router.push/refresh), editor page is now a server component passing real data to EditorShell; MockProject replaced with Project type throughout
 - **Feature 08: Editor Workspace Shell** — app/editor/[roomId]/page.tsx (server, redirects unauthenticated, shows AccessDenied for missing/forbidden projects), lib/project-access.ts (getIdentity + getProjectWithAccess), WorkspaceShell client component, WorkspaceNavbar (project name + share + AI toggle), AI sidebar placeholder, ProjectSidebar now highlights active project; create navigates to workspace
 - **Feature 09: Share Dialog** — GET/POST /api/projects/[projectId]/collaborators and DELETE /api/projects/[projectId]/collaborators/[collaboratorId]; Clerk Backend API enriches collaborator emails with display name and avatar; ShareDialog client component (owner: invite + remove + copy link; collaborator: read-only list + copy link); isOwner threaded from server page through WorkspaceShell
+- **Feature 10: Liveblocks Setup** — liveblocks.config.ts defines Presence (cursor + isThinking) and UserMeta (id, name, avatar, color); lib/liveblocks.ts lazy-cached node client + deterministic cursorColor() from palette; POST /api/liveblocks-auth verifies Clerk auth + project access, getOrCreateRoom, prepareSession with user name/avatar/color; @liveblocks/node installed
+- **Feature 11: Base Canvas** — types/canvas.ts (NodeData, CanvasNode, CanvasEdge); canvas-wrapper.tsx (LiveblocksProvider + RoomProvider + ClientSideSuspense + ConnectionErrorBoundary); canvas.tsx (useLiveblocksFlow suspense, ReactFlow with ConnectionMode.Loose, Background dots, MiniMap, fitView); canvas placeholder replaced in WorkspaceShell
+- **Feature 12: Shape Panel** — types/canvas.ts adds ShapePayload + DEFAULT_NODE_COLOR/TEXT_COLOR constants; shape-panel.tsx (Panel bottom-center, 6 draggable SVG shape buttons with ghost-shape drag payload); node-renderer.tsx (CanvasNodeRenderer custom node type, bordered rectangle with label, 4 source handles); canvas.tsx restructured with ReactFlowProvider + inner CanvasFlow, onDragOver/onDrop converts screen→flow coords via useReactFlow, adds nodes via NodeAddChange through onNodesChange
 
 ## In Progress
 
@@ -29,7 +32,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Feature 10 (see context/feature-specs/)
+- Feature 13 (see context/feature-specs/)
 
 ## Open Questions
 

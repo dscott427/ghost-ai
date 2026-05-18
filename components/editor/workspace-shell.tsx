@@ -8,6 +8,7 @@ import { RenameProjectDialog } from "./dialogs/rename-project-dialog";
 import { DeleteProjectDialog } from "./dialogs/delete-project-dialog";
 import { ShareDialog } from "./dialogs/share-dialog";
 import { useProjectActions } from "@/hooks/use-project-actions";
+import { CanvasWrapper } from "./canvas/canvas-wrapper";
 import type { Project } from "@/lib/projects";
 
 interface WorkspaceShellProps {
@@ -46,8 +47,8 @@ export function WorkspaceShell({ project, ownedProjects, sharedProjects, isOwner
       />
 
       <main className="flex flex-1 overflow-hidden pt-12">
-        <div className="flex flex-1 items-center justify-center bg-base">
-          <p className="text-sm text-copy-muted">Canvas coming soon</p>
+        <div className="flex flex-1 overflow-hidden">
+          <CanvasWrapper roomId={project.id} />
         </div>
 
         <aside
