@@ -1,28 +1,22 @@
 "use client";
 
+import Link from "next/link";
 import { X, Plus, FolderOpen, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import type { MockProject } from "@/hooks/use-project-dialogs";
+import type { Project } from "@/lib/projects";
 
 interface ProjectSidebarProps {
-  /** Whether the sidebar is visible. */
   isOpen: boolean;
-  /** Callback to close the sidebar. */
   onClose: () => void;
-  /** Opens the Create Project dialog. */
   onNewProject: () => void;
-  /** Opens the Rename dialog for the given project. */
-  onRenameProject: (project: MockProject) => void;
-  /** Opens the Delete dialog for the given project. */
-  onDeleteProject: (project: MockProject) => void;
-  /** Current in-memory project list from the hook. */
-  projects: MockProject[];
+  onRenameProject: (project: Project) => void;
+  onDeleteProject: (project: Project) => void;
+  ownedProjects: Project[];
+  sharedProjects: Project[];
+  activeProjectId?: string;
 }
 
-/**
- * Placeholder shown inside a tab when there are no projects to display.
- */
 function EmptyState({ label }: { label: string }) {
   return (
     <div className="flex flex-col items-center justify-center gap-3 py-16 text-center">
@@ -32,24 +26,32 @@ function EmptyState({ label }: { label: string }) {
   );
 }
 
-/**
- * Single project row. Owned projects show rename and delete action buttons
- * on hover; shared/collaborator projects show no actions.
- */
 function ProjectItem({
   project,
+  showActions,
+  isActive,
   onRename,
   onDelete,
 }: {
-  project: MockProject;
-  onRename: (p: MockProject) => void;
-  onDelete: (p: MockProject) => void;
+  project: Project;
+  showActions: boolean;
+  isActive: boolean;
+  onRename: (p: Project) => void;
+  onDelete: (p: Project) => void;
 }) {
   return (
-    <div className="group flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 hover:bg-elevated">
-      <FolderOpen className="h-4 w-4 shrink-0 text-copy-muted" />
-      <span className="flex-1 truncate text-sm text-copy-primary">{project.name}</span>
-      {project.owned && (
+    <Link
+      href={`/editor/${project.id}`}
+      className={[
+        "group flex items-center gap-2.5 rounded-lg px-2 py-2",
+        isActive ? "bg-elevated" : "hover:bg-elevated",
+      ].join(" ")}
+    >
+      <FolderOpen className={["h-4 w-4 shrink-0", isActive ? "text-brand" : "text-copy-muted"].join(" ")} />
+      <span className={["flex-1 truncate text-sm font-medium", isActive ? "text-brand" : "text-copy-primary"].join(" ")}>
+        {project.name}
+      </span>
+      {showActions && (
         <div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
           <Button
             variant="ghost"
@@ -77,28 +79,22 @@ function ProjectItem({
           </Button>
         </div>
       )}
-    </div>
+    </Link>
   );
 }
 
-/**
- * Floating project sidebar that slides in from the left without pushing canvas
- * content. Shows My Projects and Shared tabs with project items and actions.
- * On mobile a backdrop scrim is rendered behind the sidebar; tapping it closes it.
- */
 export function ProjectSidebar({
   isOpen,
   onClose,
   onNewProject,
   onRenameProject,
   onDeleteProject,
-  projects,
+  ownedProjects,
+  sharedProjects,
+  activeProjectId,
 }: ProjectSidebarProps) {
-  const ownedProjects = projects.filter((p) => p.owned);
-  const sharedProjects = projects.filter((p) => !p.owned);
   return (
     <>
-      {/* Backdrop scrim — mobile only; closes sidebar on tap */}
       {isOpen && (
         <div
           className="fixed inset-0 z-[48] bg-black/50 lg:hidden"
@@ -111,13 +107,12 @@ export function ProjectSidebar({
         aria-hidden={!isOpen}
         inert={!isOpen}
         className={[
-          "fixed left-0 top-0 z-[49] flex h-full w-72 flex-col",
+          "fixed left-0 top-12 bottom-0 z-[49] flex w-72 flex-col",
           "border-r border-surface-border bg-surface/95 backdrop-blur-sm",
           "transition-transform duration-200 ease-in-out",
           isOpen ? "translate-x-0" : "-translate-x-full",
         ].join(" ")}
       >
-        {/* Header */}
         <div className="flex h-12 items-center justify-between border-b border-surface-border px-4">
           <span className="text-sm font-medium text-copy-primary">Projects</span>
           <Button
@@ -131,7 +126,6 @@ export function ProjectSidebar({
           </Button>
         </div>
 
-        {/* Tabs */}
         <Tabs defaultValue="my-projects" className="flex flex-1 flex-col overflow-hidden">
           <TabsList className="mx-4 mt-3 w-auto justify-start rounded-xl bg-subtle">
             <TabsTrigger value="my-projects" className="rounded-lg text-xs">
@@ -151,6 +145,8 @@ export function ProjectSidebar({
                   <li key={p.id}>
                     <ProjectItem
                       project={p}
+                      showActions
+                      isActive={p.id === activeProjectId}
                       onRename={onRenameProject}
                       onDelete={onDeleteProject}
                     />
@@ -169,6 +165,8 @@ export function ProjectSidebar({
                   <li key={p.id}>
                     <ProjectItem
                       project={p}
+                      showActions={false}
+                      isActive={p.id === activeProjectId}
                       onRename={onRenameProject}
                       onDelete={onDeleteProject}
                     />
@@ -179,7 +177,6 @@ export function ProjectSidebar({
           </TabsContent>
         </Tabs>
 
-        {/* Footer */}
         <div className="border-t border-surface-border p-4">
           <Button
             onClick={onNewProject}
