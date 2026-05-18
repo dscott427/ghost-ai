@@ -8,7 +8,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Current Goal
 
-- Feature 08 (see context/feature-specs/)
+- Feature 10 (see context/feature-specs/)
 
 ## Completed
 
@@ -20,6 +20,8 @@ Update this file whenever the current phase, active feature, or implementation s
 - **Feature 05: Prisma** — prisma/models/project.prisma (Project + ProjectCollaborator), lib/prisma.ts singleton (Accelerate/pg branch), migration 20260517214543_init applied
 - **Feature 06: Project APIs** — GET/POST /api/projects and PATCH/DELETE /api/projects/[projectId]; 401 for unauthenticated, 403 for non-owner mutations; build passes
 - **Feature 07: Wire Editor Home** — lib/projects.ts data helper (owned + shared), hooks/use-project-actions.ts (create/rename/delete with real API calls, router.push/refresh), editor page is now a server component passing real data to EditorShell; MockProject replaced with Project type throughout
+- **Feature 08: Editor Workspace Shell** — app/editor/[roomId]/page.tsx (server, redirects unauthenticated, shows AccessDenied for missing/forbidden projects), lib/project-access.ts (getIdentity + getProjectWithAccess), WorkspaceShell client component, WorkspaceNavbar (project name + share + AI toggle), AI sidebar placeholder, ProjectSidebar now highlights active project; create navigates to workspace
+- **Feature 09: Share Dialog** — GET/POST /api/projects/[projectId]/collaborators and DELETE /api/projects/[projectId]/collaborators/[collaboratorId]; Clerk Backend API enriches collaborator emails with display name and avatar; ShareDialog client component (owner: invite + remove + copy link; collaborator: read-only list + copy link); isOwner threaded from server page through WorkspaceShell
 
 ## In Progress
 
@@ -27,7 +29,7 @@ Update this file whenever the current phase, active feature, or implementation s
 
 ## Next Up
 
-- Feature 08 (see context/feature-specs/)
+- Feature 10 (see context/feature-specs/)
 
 ## Open Questions
 

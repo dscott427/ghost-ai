@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { X, Plus, FolderOpen, Pencil, Trash2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
@@ -13,6 +14,7 @@ interface ProjectSidebarProps {
   onDeleteProject: (project: Project) => void;
   ownedProjects: Project[];
   sharedProjects: Project[];
+  activeProjectId?: string;
 }
 
 function EmptyState({ label }: { label: string }) {
@@ -27,18 +29,28 @@ function EmptyState({ label }: { label: string }) {
 function ProjectItem({
   project,
   showActions,
+  isActive,
   onRename,
   onDelete,
 }: {
   project: Project;
   showActions: boolean;
+  isActive: boolean;
   onRename: (p: Project) => void;
   onDelete: (p: Project) => void;
 }) {
   return (
-    <div className="group flex cursor-pointer items-center gap-2.5 rounded-lg px-2 py-2 hover:bg-elevated">
-      <FolderOpen className="h-4 w-4 shrink-0 text-copy-muted" />
-      <span className="flex-1 truncate text-sm text-copy-primary">{project.name}</span>
+    <Link
+      href={`/editor/${project.id}`}
+      className={[
+        "group flex items-center gap-2.5 rounded-lg px-2 py-2",
+        isActive ? "bg-elevated" : "hover:bg-elevated",
+      ].join(" ")}
+    >
+      <FolderOpen className={["h-4 w-4 shrink-0", isActive ? "text-brand" : "text-copy-muted"].join(" ")} />
+      <span className={["flex-1 truncate text-sm font-medium", isActive ? "text-brand" : "text-copy-primary"].join(" ")}>
+        {project.name}
+      </span>
       {showActions && (
         <div className="ml-auto flex items-center gap-0.5 opacity-0 transition-opacity group-hover:opacity-100">
           <Button
@@ -67,7 +79,7 @@ function ProjectItem({
           </Button>
         </div>
       )}
-    </div>
+    </Link>
   );
 }
 
@@ -79,6 +91,7 @@ export function ProjectSidebar({
   onDeleteProject,
   ownedProjects,
   sharedProjects,
+  activeProjectId,
 }: ProjectSidebarProps) {
   return (
     <>
@@ -94,7 +107,7 @@ export function ProjectSidebar({
         aria-hidden={!isOpen}
         inert={!isOpen}
         className={[
-          "fixed left-0 top-0 z-[49] flex h-full w-72 flex-col",
+          "fixed left-0 top-12 bottom-0 z-[49] flex w-72 flex-col",
           "border-r border-surface-border bg-surface/95 backdrop-blur-sm",
           "transition-transform duration-200 ease-in-out",
           isOpen ? "translate-x-0" : "-translate-x-full",
@@ -133,6 +146,7 @@ export function ProjectSidebar({
                     <ProjectItem
                       project={p}
                       showActions
+                      isActive={p.id === activeProjectId}
                       onRename={onRenameProject}
                       onDelete={onDeleteProject}
                     />
@@ -152,6 +166,7 @@ export function ProjectSidebar({
                     <ProjectItem
                       project={p}
                       showActions={false}
+                      isActive={p.id === activeProjectId}
                       onRename={onRenameProject}
                       onDelete={onDeleteProject}
                     />

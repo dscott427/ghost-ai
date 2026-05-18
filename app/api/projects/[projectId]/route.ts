@@ -26,7 +26,7 @@ export async function PATCH(request: Request, { params }: RouteParams) {
   if (!name) return NextResponse.json({ error: "name is required" }, { status: 400 });
 
   const updated = await prisma.project.update({
-    where: { id: project!.id },
+    where: { id: projectId },
     data: { name },
   });
 
@@ -41,7 +41,7 @@ export async function DELETE(_request: Request, { params }: RouteParams) {
   const { project, error } = await getOwnedProject(userId, projectId);
   if (error) return error;
 
-  await prisma.project.delete({ where: { id: project!.id } });
+  await prisma.project.delete({ where: { id: projectId } });
 
   return new NextResponse(null, { status: 204 });
 }

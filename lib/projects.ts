@@ -1,5 +1,5 @@
-import { auth, currentUser } from "@clerk/nextjs/server";
 import { prisma } from "./prisma";
+import { getIdentity } from "./project-access";
 
 export interface Project {
   id: string;
@@ -16,11 +16,10 @@ export async function getProjectsForUser(): Promise<{
   owned: Project[];
   shared: Project[];
 }> {
-  const { userId } = await auth();
-  if (!userId) return { owned: [], shared: [] };
+  const identity = await getIdentity();
+  if (!identity) return { owned: [], shared: [] };
 
-  const user = await currentUser();
-  const email = user?.emailAddresses[0]?.emailAddress ?? null;
+  const { userId, email } = identity;
 
   const [owned, collaborations] = await Promise.all([
     prisma.project.findMany({

@@ -1,19 +1,11 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useRef } from "react";
 import { useRouter, usePathname } from "next/navigation";
+import { toSlug } from "@/lib/utils";
 import type { Project } from "@/lib/projects";
 
 type DialogType = "create" | "rename" | "delete" | null;
-
-function toSlug(name: string): string {
-  return name
-    .toLowerCase()
-    .replace(/\s+/g, "-")
-    .replace(/[^a-z0-9-]/g, "")
-    .replace(/-+/g, "-")
-    .replace(/^-|-$/g, "");
-}
 
 function shortSuffix(): string {
   return Math.random().toString(36).slice(2, 6);
@@ -27,17 +19,14 @@ export function useProjectActions() {
   const [nameInput, setNameInput] = useState("");
   const [activeProject, setActiveProject] = useState<Project | null>(null);
   const [isLoading, setIsLoading] = useState(false);
-  const [suffix, setSuffix] = useState("");
+  const suffixRef = useRef("");
 
-  const slug = useMemo(
-    () => (nameInput.trim() ? `${toSlug(nameInput)}-${suffix}` : ""),
-    [nameInput, suffix],
-  );
+  const slug = nameInput.trim() ? `${toSlug(nameInput)}-${suffixRef.current}` : "";
 
   function openCreate() {
+    suffixRef.current = shortSuffix();
     setNameInput("");
     setActiveProject(null);
-    setSuffix(shortSuffix());
     setOpenDialog("create");
   }
 
@@ -70,8 +59,9 @@ export function useProjectActions() {
           body: JSON.stringify({ name: trimmed || "Untitled Project" }),
         });
         if (res.ok) {
+          const project: Project = await res.json();
           closeDialog();
-          router.refresh();
+          router.push(`/editor/${project.id}`);
         }
       } else if (openDialog === "rename" && activeProject) {
         const res = await fetch(`/api/projects/${activeProject.id}`, {
@@ -90,7 +80,8 @@ export function useProjectActions() {
         if (res.ok) {
           const deletedId = activeProject.id;
           closeDialog();
-          if (pathname?.includes(deletedId)) {
+          const segments = pathname?.split("/") ?? [];
+          if (segments.includes(deletedId)) {
             router.push("/editor");
           } else {
             router.refresh();
